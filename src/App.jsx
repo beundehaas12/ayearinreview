@@ -47,7 +47,7 @@ function App() {
   const totalMoveDistance = Math.max(0, (currentModels.length - 1) * (cardWidth + gap));
 
   useEffect(() => {
-    // Set the body height so we can scroll
+    // Set the body height so we can scroll (Universal)
     setScrollRange(totalMoveDistance);
   }, [totalMoveDistance]);
 
@@ -60,6 +60,18 @@ function App() {
   // Map vertical scroll to horizontal movement
   const x = useTransform(finalScrollY, [0, scrollRange], [0, -totalMoveDistance]);
 
+  // Scroll Container Ref for Mobile (Removed native scroll)
+
+  // Helper to sync state from index
+  const updateActiveState = (index) => {
+    setActiveIndex(index);
+    const model = currentModels[index];
+    if (model) {
+      const month = parseDate(model.releaseDate).toLocaleString('en-US', { month: 'long' });
+      setActiveMonth(prev => prev !== month ? month : prev);
+    }
+  };
+
   // Robust Active Month & Index Listener
   useMotionValueEvent(finalScrollY, "change", (latest) => {
     // Toggle Intro/Month Header
@@ -69,23 +81,51 @@ function App() {
 
     // effectiveScroll matches the input to the 'x' transform
     const progress = Math.max(0, Math.min(latest / scrollRange, 1));
-
-    // Map progress to model index
-    // 0 = first model, 1 = last model
     const exactIndex = progress * (currentModels.length - 1);
     const index = Math.round(exactIndex);
 
-    // Update Active Index for Auto-Expand
-    setActiveIndex(index);
-
-    const model = currentModels[index];
-    if (model) {
-      // Enforce English locale using SAFE parse
-      const month = parseDate(model.releaseDate).toLocaleString('en-US', { month: 'long' });
-      // Only update if changed to avoid renders
-      setActiveMonth(prev => prev !== month ? month : prev);
-    }
+    updateActiveState(index);
   });
+
+  // OMNI-SCROLL: Touch Injector
+  // Allows horizontal swipes to drive vertical scroll
+  useEffect(() => {
+    if (!isMobile) return;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      const deltaX = touchStartX - touchX;
+      const deltaY = touchStartY - touchY;
+
+      // If horizontal swipe is dominant
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Prevent default (browser back/forward)
+        if (e.cancelable) e.preventDefault();
+
+        // Scroll window vertically based on horizontal delta
+        window.scrollBy({ top: deltaX * 1.5, behavior: 'instant' }); // 1.5x speed multiplier
+
+        touchStartX = touchX; // Reset for continuous delta
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isMobile]);
 
   // Color Sync
   const activeModel = currentModels[activeIndex] || currentModels[0];
@@ -211,7 +251,10 @@ function App() {
           </motion.div>
         </header>
 
-        <motion.div className={styles.horizontalTrack} style={{ x }}>
+        <motion.div
+          className={styles.horizontalTrack}
+          style={{ x }}
+        >
 
           {/* Continuous Axis Line - Explicitly sized to full track width */}
           <div
@@ -303,29 +346,29 @@ function App() {
         </AnimatePresence>
       </div>
 
-      {/* Invisible Snap Points using exact measurements */}
+      {/* Scroll Spacer: Drives the document height */}
       <div
         style={{
+          height: `${scrollRange + window.innerHeight}px`,
+          width: '100%',
           position: 'absolute',
           top: 0,
           left: 0,
-          width: '100%',
-          pointerEvents: 'none'
+          pointerEvents: 'none',
+          zIndex: -1
         }}
       >
+        {/* Generate Snap Points for Vertical Scroll Snapping */}
         {currentModels.map((_, i) => (
           <div
             key={i}
             style={{
-              // Move exactly one card unit per snap
               height: `${cardWidth + gap}px`,
               scrollSnapAlign: 'start',
               scrollSnapStop: isMobile ? 'normal' : 'always'
             }}
           />
         ))}
-        {/* Extra space at bottom to allow last card to be fully snapped */}
-        <div style={{ height: '50vh' }} />
       </div>
     </div>
   );
