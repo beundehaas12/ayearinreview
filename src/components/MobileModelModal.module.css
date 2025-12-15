@@ -36,6 +36,8 @@
     background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(10, 10, 10, 0.9) 100%);
     padding: 30px;
     flex: 1;
+    min-height: 0;
+    /* Critical: Allows flex child to shrink and scroll */
     overflow-y: auto;
     position: relative;
     z-index: 2;

@@ -168,6 +168,46 @@ function App() {
   return (
     <div className={styles.appContainer} style={{ height: `${scrollRange + window.innerHeight}px` }}>
 
+      {/* X Follow Button - Top Right */}
+      <a
+        href="https://x.com/intent/follow?screen_name=promptdesigner1"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          zIndex: 9999,
+          pointerEvents: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          background: 'rgba(0, 0, 0, 0.8)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          borderRadius: '20px',
+          padding: '8px 16px',
+          color: '#fff',
+          textDecoration: 'none',
+          fontSize: '14px',
+          fontWeight: '500',
+          transition: 'all 0.3s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.target.style.background = '#fff';
+          e.target.style.color = '#000';
+        }}
+        onMouseLeave={(e) => {
+          e.target.style.background = 'rgba(0, 0, 0, 0.8)';
+          e.target.style.color = '#fff';
+        }}
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+        Follow
+      </a>
+
       <div className={styles.viewport}>
         <Suspense fallback={null}>
           <ThreeBackground
