@@ -14,8 +14,8 @@
     align-items: center;
     padding: 0;
     box-sizing: border-box;
-    touch-action: none;
-    /* Block touch on overlay, allow on children */
+    overflow: hidden;
+    /* Prevent body scroll when modal is open */
 }
 
 .cardFrame {
@@ -23,7 +23,6 @@
     width: 100%;
     max-width: none;
     height: 100%;
-    /* Nearly full screen */
     background: rgba(5, 5, 5, 0.95);
     border: none;
     border-radius: 0;
@@ -31,6 +30,8 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    touch-action: auto;
+    /* Re-enable touch for modal content */
 }
 
 /* Inner Content Area - Matches ModelCard */
