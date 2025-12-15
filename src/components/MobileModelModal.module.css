@@ -38,19 +38,19 @@
 .innerContent {
     background: linear-gradient(180deg, rgba(20, 20, 20, 0.6) 0%, rgba(10, 10, 10, 0.9) 100%);
     padding: 30px;
+    padding-bottom: 100px;
+    /* Extra space for bottom content */
     flex: 1;
     min-height: 0;
-    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+    /* Explicit height constraint */
+    overflow-y: scroll !important;
+    /* Force scrollbar */
     -webkit-overflow-scrolling: touch;
-    /* iOS momentum scrolling */
     touch-action: pan-y;
-    /* Allow vertical touch scroll */
     overscroll-behavior: contain;
-    /* Prevent scroll chaining to parent */
     position: relative;
     z-index: 2;
-    /* Hide scrollbar for cleaner look */
-    scrollbar-width: none;
 }
 
 .innerContent::-webkit-scrollbar {
