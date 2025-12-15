@@ -318,7 +318,7 @@ function App() {
               // Move exactly one card unit per snap
               height: `${cardWidth + gap}px`,
               scrollSnapAlign: 'start',
-              scrollSnapStop: 'always'
+              scrollSnapStop: isMobile ? 'normal' : 'always'
             }}
           />
         ))}
