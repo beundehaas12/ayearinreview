@@ -39,3 +39,16 @@ h6 {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* Mobile: Disable vertical scroll (horizontal only) */
+@media (max-width: 768px) {
+
+  html,
+  body {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+  }
+}
