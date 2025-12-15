@@ -1,0 +1,164 @@
+.appContainer {
+    position: relative;
+    width: 100%;
+}
+
+.viewport {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.header {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.intro h1 {
+    font-size: 3rem;
+    line-height: 0.9;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.intro p {
+    color: var(--color-neon-blue);
+    font-family: 'Courier New', monospace;
+}
+
+.horizontalTrack {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    padding-left: 0;
+    /* JS Controlled */
+    position: relative;
+    will-change: transform;
+    /* Performance hint */
+}
+
+.spacer {
+    /* JS Controlled */
+    height: 10px;
+    flex-shrink: 0;
+}
+
+.axisLine {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    z-index: 0;
+    transform: translateY(-50%);
+}
+
+.timelineItem {
+    position: relative;
+    margin-right: 15vw;
+    /* Space between cards */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 600px;
+}
+
+.monthMarker {
+    position: absolute;
+    top: -40vh;
+    left: 0;
+    font-size: 8rem;
+    /* Giant month background */
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    text-transform: uppercase;
+    font-family: var(--font-display);
+    white-space: nowrap;
+    z-index: -1;
+}
+
+/* Node Point Removed */
+
+.endCredits {
+    min-width: 50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--color-text-muted);
+}
+
+.progressBar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.progressFill {
+    height: 100%;
+    background: var(--color-neon-blue);
+    box-shadow: 0 0 10px var(--color-neon-blue);
+}
+
+@media (max-width: 768px) {
+    .timelineItem {
+        min-width: 85vw;
+        margin-right: 5vw;
+    }
+
+
+    .spacer {
+        min-width: 10vw;
+    }
+}
+
+.filterWrapper {
+    position: absolute;
+    top: -20px;
+    /* Shift up relative to header */
+    left: 0;
+    z-index: 1000;
+    pointer-events: auto;
+    /* Re-enable pointer events since header is none */
+}
+
+.makerFilter {
+    background: rgba(10, 10, 10, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--color-text-secondary);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+    appearance: none;
+    /* Hide default arrow */
+    -webkit-appearance: none;
+}
+
+.makerFilter:hover {
+    border-color: #fff;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.makerFilter option {
+    background: #050505;
+    color: #fff;
+}

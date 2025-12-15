@@ -1,0 +1,56 @@
+/* src/styles/theme.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+
+:root {
+    /* Colors - Neon & Dark Mode */
+    --color-bg-dark: #050505;
+    --color-bg-panel: #0a0a0a;
+    
+    --color-neon-blue: #00f3ff;
+    --color-neon-pink: #ff00ff;
+    --color-neon-green: #00ff66;
+    --color-neon-purple: #bd00ff;
+    
+    --color-glass-border: rgba(255, 255, 255, 0.1);
+    --color-glass-surface: rgba(255, 255, 255, 0.03);
+    --color-glass-highlight: rgba(255, 255, 255, 0.1);
+
+    --color-text-primary: #ffffff;
+    --color-text-secondary: rgba(255, 255, 255, 0.7);
+    --color-text-muted: rgba(255, 255, 255, 0.5);
+
+    /* Typography */
+    --font-display: 'Orbitron', sans-serif;
+    --font-heading: 'Rajdhani', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 8rem;
+
+    /* Effects */
+    --blur-glass: 16px;
+    --glow-text: 0 0 10px rgba(255, 255, 255, 0.5);
+    --glow-box: 0 0 20px rgba(0, 243, 255, 0.2);
+    
+    --ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-dark); 
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-glass-border); 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-blue); 
+}

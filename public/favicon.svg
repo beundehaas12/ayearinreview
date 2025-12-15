@@ -1,0 +1,48 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="128" fill="#050505"/>
+  
+  <!-- Outer Glow -->
+  <circle cx="256" cy="256" r="150" fill="url(#paint0_radial_glow)" fill-opacity="0.4"/>
+  
+  <!-- Orbital Arcs (Purple) -->
+  <path d="M256 96C167.634 96 96 167.634 96 256" stroke="url(#paint1_linear_purple)" stroke-width="32" stroke-linecap="round" filter="url(#glow)"/>
+  <path d="M256 416C344.366 416 416 344.366 416 256" stroke="url(#paint2_linear_purple)" stroke-width="32" stroke-linecap="round" filter="url(#glow)"/>
+  
+  <!-- Core Orb (Cyan) -->
+  <circle cx="256" cy="256" r="64" fill="#00F3FF" filter="url(#glow_core)"/>
+  <circle cx="256" cy="256" r="40" fill="#FFFFFF"/>
+  
+  <defs>
+    <!-- Cyan Glow -->
+    <filter id="glow_core" x="150" y="150" width="212" height="212" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="20"/>
+      <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+    </filter>
+
+    <!-- Purple Glow -->
+    <filter id="glow" x="0" y="0" width="512" height="512" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="15"/>
+      <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+    </filter>
+
+    <!-- Gradients -->
+    <radialGradient id="paint0_radial_glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 256) rotate(90) scale(150)">
+      <stop stop-color="#00F3FF"/>
+      <stop offset="1" stop-color="#00F3FF" stop-opacity="0"/>
+    </radialGradient>
+    
+    <linearGradient id="paint1_linear_purple" x1="96" y1="96" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BC13FE"/>
+      <stop offset="1" stop-color="#7A00FF"/>
+    </linearGradient>
+    
+    <linearGradient id="paint2_linear_purple" x1="416" y1="416" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BC13FE"/>
+      <stop offset="1" stop-color="#7A00FF"/>
+    </linearGradient>
+  </defs>
+</svg>
