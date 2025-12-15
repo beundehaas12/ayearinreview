@@ -52,14 +52,16 @@ function App() {
   }, [totalMoveDistance]);
 
   const { scrollY } = useScroll();
-  // Tighter spring for snappier feel
-  const smoothScrollY = useSpring(scrollY, { stiffness: 200, damping: 30, mass: 0.2 });
+
+  // Desktop: Spring for smooth mousewheel. Mobile: Direct mapping for 1:1 touch.
+  const physicsScroll = useSpring(scrollY, { stiffness: 200, damping: 30, mass: 0.2 });
+  const finalScrollY = isMobile ? scrollY : physicsScroll;
 
   // Map vertical scroll to horizontal movement
-  const x = useTransform(smoothScrollY, [0, scrollRange], [0, -totalMoveDistance]);
+  const x = useTransform(finalScrollY, [0, scrollRange], [0, -totalMoveDistance]);
 
   // Robust Active Month & Index Listener
-  useMotionValueEvent(smoothScrollY, "change", (latest) => {
+  useMotionValueEvent(finalScrollY, "change", (latest) => {
     // Toggle Intro/Month Header
     setIsScrolled(latest > 50);
 
@@ -143,7 +145,7 @@ function App() {
       <div className={styles.viewport}>
         <Suspense fallback={null}>
           <ThreeBackground
-            scrollY={smoothScrollY}
+            scrollY={finalScrollY}
             maxScroll={scrollRange}
             activeColor={activeColor}
           />
@@ -283,7 +285,7 @@ function App() {
           <motion.div
             className={styles.progressFill}
             style={{
-              width: useTransform(smoothScrollY, [0, scrollRange > 0 ? scrollRange : 1], ['0%', '100%']),
+              width: useTransform(finalScrollY, [0, scrollRange > 0 ? scrollRange : 1], ['0%', '100%']),
               backgroundColor: activeColor, // Sync color
               boxShadow: `0 0 10px ${activeColor}`,
               transition: 'background-color 0.5s ease, box-shadow 0.5s ease'
