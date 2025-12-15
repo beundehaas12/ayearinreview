@@ -287,16 +287,33 @@
     }
 
     .name {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
     }
 
     /* Disable complex hover on mobile */
     .perspectiveWrapper {
         perspective: none;
+        max-width: 100%;
     }
 
     .card {
         transform: none !important;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .innerContent {
+        padding: 25px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .makerCode {
+        flex-wrap: wrap;
+        gap: 5px;
     }
 }
 
