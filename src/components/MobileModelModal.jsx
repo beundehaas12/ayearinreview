@@ -65,22 +65,22 @@ const MobileModelModal = ({ model, onClose }) => {
 
                     <div className={styles.actionRow}>
                         <a
-                            href={model.url}
+                            href={`https://x.com/search?q="${encodeURIComponent(model.name)}" since:2025-01-01 until:2025-12-31&src=typed_query&f=live`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.sourceButton}
                         >
-                            [ LEARN MORE ]
+                            [ SEE WHAT PEOPLE SAY ]
                         </a>
 
                         <a
-                            href={`https://x.com/search?q="${encodeURIComponent(model.name)}" since:2025-01-01 until:2025-12-31&src=typed_query&f=live`}
+                            href={model.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.sourceButton}
                             style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#fff' }}
                         >
-                            [ PUBLIC_SENTIMENT ]
+                            [ LEARN MORE ]
                         </a>
                     </div>
                 </div>

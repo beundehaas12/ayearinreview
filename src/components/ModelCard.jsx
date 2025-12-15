@@ -119,24 +119,24 @@ const ModelCard = React.memo(({ model, index, isActive, onSelect }) => {
 
                                 <div className={styles.actionRow} style={{ gap: '20px' }}>
                                     <a
-                                        href={model.url}
+                                        href={`https://x.com/search?q="${encodeURIComponent(model.name)}" since:2025-01-01 until:2025-12-31&src=typed_query&f=live`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={styles.sourceButton}
                                         onClick={(e) => e.stopPropagation()}
                                     >
-                                        [ LEARN MORE ]
+                                        [ SEE WHAT PEOPLE SAY ]
                                     </a>
 
                                     <a
-                                        href={`https://x.com/search?q="${encodeURIComponent(model.name)}" since:2025-01-01 until:2025-12-31&src=typed_query&f=live`}
+                                        href={model.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={styles.sourceButton}
                                         onClick={(e) => e.stopPropagation()}
                                         style={{ borderColor: 'rgba(255,255,255,0.3)', color: '#fff' }}
                                     >
-                                        [ PUBLIC_SENTIMENT ]
+                                        [ LEARN MORE ]
                                     </a>
                                 </div>
                             </motion.div>
