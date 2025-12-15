@@ -2,9 +2,18 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import styles from './ModelCard.module.css';
 
-const ModelCard = React.memo(({ model, index, isActive }) => {
+const ModelCard = React.memo(({ model, index, isActive, onSelect }) => {
     const ref = useRef(null);
     const [isExpanded, setIsExpanded] = useState(false);
+
+    // If onSelect is provided, use it (mobile behavior). Otherwise toggle local state.
+    const handleClick = () => {
+        if (onSelect) {
+            onSelect();
+        } else {
+            setIsExpanded(!isExpanded);
+        }
+    };
 
     // 3D Tilt State
     const x = useMotionValue(0);
@@ -67,7 +76,7 @@ const ModelCard = React.memo(({ model, index, isActive }) => {
                 <div className={styles.cornerBL} />
                 <div className={styles.cornerBR} />
 
-                <div className={styles.innerContent} onClick={() => setIsExpanded(!isExpanded)}> {/* Fix: setIsExpanded */}
+                <div className={styles.innerContent} onClick={handleClick}>
                     <div className={styles.header}>
                         <div className={styles.makerCode}>
                             <span>{model.maker}</span>

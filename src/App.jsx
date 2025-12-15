@@ -1,18 +1,20 @@
 import React, { Suspense, useRef, useEffect, useState } from 'react';
 import ThreeBackground from './components/ThreeBackground';
 import ModelCard from './components/ModelCard';
+import MobileModelModal from './components/MobileModelModal';
 import MonthNavigator from './components/MonthNavigator';
 import FilterDropdown from './components/FilterDropdown';
 import { models2025 } from './data/models2025';
 import { parseDate } from './utils/dateUtils';
 import styles from './App.module.css';
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 
 function App() {
   const [activeMonth, setActiveMonth] = useState('January');
   const [isScrolled, setIsScrolled] = useState(false);
   const [scrollRange, setScrollRange] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedModel, setSelectedModel] = useState(null);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1000);
 
   // Handle Resize
@@ -241,7 +243,8 @@ function App() {
                 <ModelCard
                   model={model}
                   index={index}
-                  isActive={index === activeIndex} // Pass active state
+                  isActive={!isMobile && index === activeIndex} // Only auto-expand on desktop
+                  onSelect={() => isMobile && setSelectedModel(model)} // Only trigger modal on mobile
                 />
               </div>
             );
@@ -253,15 +256,28 @@ function App() {
         </motion.div>
 
         {/* Bottom Month Navigator */}
-        <MonthNavigator
-          activeMonth={activeMonth}
-          onMonthClick={handleMonthClick} // This function handles the scroll logic
-          models={currentModels} // Pass filtered models for tooltip data
-          activeModelId={currentModels[activeIndex]?.id}
-          onModelClick={handleJumpToModel}
-          activeColor={activeColor}
-          isMobile={isMobile}
-        />
+        {/* Bottom Month Navigator - Hide when modal is open on mobile */}
+        <AnimatePresence>
+          {!selectedModel && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 50 }}
+              transition={{ duration: 0.3 }}
+              style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: 999 }}
+            >
+              <MonthNavigator
+                activeMonth={activeMonth}
+                onMonthClick={handleMonthClick}
+                models={currentModels}
+                activeModelId={currentModels[activeIndex]?.id}
+                onModelClick={handleJumpToModel}
+                activeColor={activeColor}
+                isMobile={isMobile}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <motion.div className={styles.progressBar}>
           <motion.div
@@ -274,6 +290,15 @@ function App() {
             }}
           />
         </motion.div>
+
+        <AnimatePresence>
+          {selectedModel && (
+            <MobileModelModal
+              model={selectedModel}
+              onClose={() => setSelectedModel(null)}
+            />
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Invisible Snap Points using exact measurements */}
