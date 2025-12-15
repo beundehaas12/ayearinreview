@@ -87,43 +87,93 @@ function App() {
     updateActiveState(index);
   });
 
-  // OMNI-SCROLL: Touch Injector
-  // Allows horizontal swipes to drive vertical scroll
+  // OMNI-SCROLL: Touch Injector with Inertia
+  // Allows horizontal flicks to drive vertical scroll with momentum
   useEffect(() => {
     if (!isMobile) return;
 
     let touchStartX = 0;
     let touchStartY = 0;
+    let lastTouchX = 0;
+    let velocityX = 0;
+    let lastTime = 0;
+    let animationFrameId;
+    let isDragging = false;
 
     const handleTouchStart = (e) => {
+      // Stop any active inertia
+      cancelAnimationFrame(animationFrameId);
+
       touchStartX = e.touches[0].clientX;
       touchStartY = e.touches[0].clientY;
+      lastTouchX = touchStartX;
+      lastTime = Date.now();
+      velocityX = 0;
+      isDragging = true;
     };
 
     const handleTouchMove = (e) => {
+      if (!isDragging) return;
+
       const touchX = e.touches[0].clientX;
       const touchY = e.touches[0].clientY;
-      const deltaX = touchStartX - touchX;
-      const deltaY = touchStartY - touchY;
+      const deltaX = lastTouchX - touchX;
+      // Total delta from start to check dominance
+      const totalDeltaX = touchStartX - touchX;
+      const totalDeltaY = touchStartY - touchY;
 
-      // If horizontal swipe is dominant
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        // Prevent default (browser back/forward)
+      // Update for next frame
+      const now = Date.now();
+      const dt = now - lastTime;
+
+      // Calculate velocity (pixels per ms)
+      if (dt > 0) {
+        velocityX = (deltaX / dt);
+      }
+
+      lastTouchX = touchX;
+      lastTime = now;
+
+      // If horizontal swipe is dominant (check total drag)
+      if (Math.abs(totalDeltaX) > Math.abs(totalDeltaY)) {
         if (e.cancelable) e.preventDefault();
+        // 2.0x multiplier for snappier 1:1 feel
+        window.scrollBy({ top: deltaX * 2.0, behavior: 'instant' });
+      }
+    };
 
-        // Scroll window vertically based on horizontal delta
-        window.scrollBy({ top: deltaX * 1.5, behavior: 'instant' }); // 1.5x speed multiplier
+    const handleTouchEnd = () => {
+      isDragging = false;
 
-        touchStartX = touchX; // Reset for continuous delta
+      // Inertia Loop
+      const friction = 0.95; // Decay rate
+      const stopThreshold = 0.1;
+
+      const step = () => {
+        if (Math.abs(velocityX) > stopThreshold) {
+          window.scrollBy({ top: velocityX * 16, behavior: 'instant' }); // *16 for ~60fps frame time scaling
+          velocityX *= friction;
+          animationFrameId = requestAnimationFrame(step);
+        }
+      };
+
+      // Start momentum if velocity is significant
+      if (Math.abs(velocityX) > 0.5) {
+        animationFrameId = requestAnimationFrame(step);
       }
     };
 
     window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('touchcancel', handleTouchEnd);
 
     return () => {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [isMobile]);
 
