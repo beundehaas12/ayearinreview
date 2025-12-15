@@ -87,93 +87,93 @@ function App() {
     updateActiveState(index);
   });
 
-  // OMNI-SCROLL: Touch Injector with Inertia
-  // Allows horizontal flicks to drive vertical scroll with momentum
+  // OMNI-SCROLL: Touch Injector v2 (Simplified Physics)
+  // Horizontal flicks drive vertical scroll with native-like momentum
   useEffect(() => {
     if (!isMobile) return;
 
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let lastTouchX = 0;
-    let velocityX = 0;
-    let lastTime = 0;
-    let animationFrameId;
-    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let prevX = 0;
+    let velocity = 0;
+    let isHorizontalSwipe = null; // null = undecided, true/false = locked
+    let rafId = null;
 
     const handleTouchStart = (e) => {
-      // Stop any active inertia
-      cancelAnimationFrame(animationFrameId);
+      // Cancel any running inertia
+      if (rafId) cancelAnimationFrame(rafId);
 
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      lastTouchX = touchStartX;
-      lastTime = Date.now();
-      velocityX = 0;
-      isDragging = true;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      prevX = startX;
+      velocity = 0;
+      isHorizontalSwipe = null; // Reset direction lock
     };
 
     const handleTouchMove = (e) => {
-      if (!isDragging) return;
+      const x = e.touches[0].clientX;
+      const y = e.touches[0].clientY;
 
-      const touchX = e.touches[0].clientX;
-      const touchY = e.touches[0].clientY;
-      const deltaX = lastTouchX - touchX;
-      // Total delta from start to check dominance
-      const totalDeltaX = touchStartX - touchX;
-      const totalDeltaY = touchStartY - touchY;
+      // Decide direction lock on first significant move
+      if (isHorizontalSwipe === null) {
+        const dx = Math.abs(x - startX);
+        const dy = Math.abs(y - startY);
 
-      // Update for next frame
-      const now = Date.now();
-      const dt = now - lastTime;
-
-      // Calculate velocity (pixels per ms)
-      if (dt > 0) {
-        velocityX = (deltaX / dt);
+        // Need at least 10px of movement to decide
+        if (dx > 10 || dy > 10) {
+          isHorizontalSwipe = dx > dy;
+        }
       }
 
-      lastTouchX = touchX;
-      lastTime = now;
-
-      // If horizontal swipe is dominant (check total drag)
-      if (Math.abs(totalDeltaX) > Math.abs(totalDeltaY)) {
+      // If locked to horizontal
+      if (isHorizontalSwipe === true) {
         if (e.cancelable) e.preventDefault();
-        // 2.0x multiplier for snappier 1:1 feel
-        window.scrollBy({ top: deltaX * 2.0, behavior: 'instant' });
+
+        const delta = prevX - x;
+
+        // Track velocity (exponential moving average for smoothness)
+        velocity = velocity * 0.7 + delta * 0.3;
+
+        // Scroll immediately with 2x multiplier
+        window.scrollBy({ top: delta * 2, behavior: 'instant' });
       }
+
+      prevX = x;
     };
 
     const handleTouchEnd = () => {
-      isDragging = false;
+      // Only apply inertia if we were in horizontal mode
+      if (isHorizontalSwipe !== true) return;
 
-      // Inertia Loop
-      const friction = 0.95; // Decay rate
-      const stopThreshold = 0.1;
+      // Inertia: Apply decaying velocity
+      const friction = 0.92;
+      const minVelocity = 0.5;
 
       const step = () => {
-        if (Math.abs(velocityX) > stopThreshold) {
-          window.scrollBy({ top: velocityX * 16, behavior: 'instant' }); // *16 for ~60fps frame time scaling
-          velocityX *= friction;
-          animationFrameId = requestAnimationFrame(step);
+        if (Math.abs(velocity) > minVelocity) {
+          window.scrollBy({ top: velocity * 2, behavior: 'instant' });
+          velocity *= friction;
+          rafId = requestAnimationFrame(step);
         }
       };
 
-      // Start momentum if velocity is significant
-      if (Math.abs(velocityX) > 0.5) {
-        animationFrameId = requestAnimationFrame(step);
+      // Only start inertia if velocity is meaningful
+      if (Math.abs(velocity) > 2) {
+        rafId = requestAnimationFrame(step);
       }
     };
 
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd);
-    window.addEventListener('touchcancel', handleTouchEnd);
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    document.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('touchcancel', handleTouchEnd);
-      cancelAnimationFrame(animationFrameId);
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('touchcancel', handleTouchEnd);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, [isMobile]);
 
