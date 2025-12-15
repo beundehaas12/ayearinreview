@@ -140,9 +140,13 @@
 
     .timelineItem {
         min-width: 85vw;
+        max-width: 85vw;
+        width: 85vw;
         margin-right: 5vw;
         scroll-snap-align: center;
         flex-shrink: 0;
+        overflow: hidden;
+        box-sizing: border-box;
     }
 
     .spacer {

@@ -36,11 +36,12 @@
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    /* Removed bottom margin for perfect centering */
     display: flex;
     justify-content: center;
     position: relative;
     z-index: 10;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .card {
