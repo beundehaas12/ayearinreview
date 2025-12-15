@@ -47,9 +47,12 @@ function App() {
   const totalMoveDistance = Math.max(0, (currentModels.length - 1) * (cardWidth + gap));
 
   useEffect(() => {
-    // Set the body height so we can scroll (Universal)
-    setScrollRange(totalMoveDistance);
-  }, [totalMoveDistance]);
+    // Desktop: set body height for vertical scroll. Mobile: height 0 (native horizontal).
+    setScrollRange(isMobile ? 0 : totalMoveDistance);
+  }, [totalMoveDistance, isMobile]);
+
+  // Ref for mobile horizontal scroll container
+  const mobileScrollRef = useRef(null);
 
   const { scrollY } = useScroll();
 
@@ -87,95 +90,15 @@ function App() {
     updateActiveState(index);
   });
 
-  // OMNI-SCROLL: Touch Injector v2 (Simplified Physics)
-  // Horizontal flicks drive vertical scroll with native-like momentum
-  useEffect(() => {
+  // Mobile: Native horizontal scroll handler
+  const handleMobileScroll = (e) => {
     if (!isMobile) return;
-
-    let startX = 0;
-    let startY = 0;
-    let prevX = 0;
-    let velocity = 0;
-    let isHorizontalSwipe = null; // null = undecided, true/false = locked
-    let rafId = null;
-
-    const handleTouchStart = (e) => {
-      // Cancel any running inertia
-      if (rafId) cancelAnimationFrame(rafId);
-
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      prevX = startX;
-      velocity = 0;
-      isHorizontalSwipe = null; // Reset direction lock
-    };
-
-    const handleTouchMove = (e) => {
-      const x = e.touches[0].clientX;
-      const y = e.touches[0].clientY;
-
-      // Decide direction lock on first significant move
-      if (isHorizontalSwipe === null) {
-        const dx = Math.abs(x - startX);
-        const dy = Math.abs(y - startY);
-
-        // Need at least 10px of movement to decide
-        if (dx > 10 || dy > 10) {
-          isHorizontalSwipe = dx > dy;
-        }
-      }
-
-      // If locked to horizontal
-      if (isHorizontalSwipe === true) {
-        if (e.cancelable) e.preventDefault();
-
-        const delta = prevX - x;
-
-        // Track velocity (exponential moving average for smoothness)
-        velocity = velocity * 0.7 + delta * 0.3;
-
-        // Scroll immediately with 2x multiplier
-        window.scrollBy({ top: delta * 2, behavior: 'instant' });
-      }
-
-      prevX = x;
-    };
-
-    const handleTouchEnd = () => {
-      // Only apply inertia if we were in horizontal mode
-      if (isHorizontalSwipe !== true) return;
-
-      // Inertia: Apply decaying velocity
-      const friction = 0.92;
-      const minVelocity = 0.5;
-
-      const step = () => {
-        if (Math.abs(velocity) > minVelocity) {
-          window.scrollBy({ top: velocity * 2, behavior: 'instant' });
-          velocity *= friction;
-          rafId = requestAnimationFrame(step);
-        }
-      };
-
-      // Only start inertia if velocity is meaningful
-      if (Math.abs(velocity) > 2) {
-        rafId = requestAnimationFrame(step);
-      }
-    };
-
-    document.addEventListener('touchstart', handleTouchStart, { passive: true });
-    document.addEventListener('touchmove', handleTouchMove, { passive: false });
-    document.addEventListener('touchend', handleTouchEnd, { passive: true });
-    document.addEventListener('touchcancel', handleTouchEnd, { passive: true });
-
-    return () => {
-      document.removeEventListener('touchstart', handleTouchStart);
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleTouchEnd);
-      document.removeEventListener('touchcancel', handleTouchEnd);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, [isMobile]);
+    const scrollLeft = e.target.scrollLeft;
+    const itemWidth = cardWidth + gap;
+    const index = Math.round(scrollLeft / itemWidth);
+    updateActiveState(Math.min(index, currentModels.length - 1));
+    setIsScrolled(scrollLeft > 50);
+  };
 
   // Color Sync
   const activeModel = currentModels[activeIndex] || currentModels[0];
@@ -302,8 +225,10 @@ function App() {
         </header>
 
         <motion.div
+          ref={isMobile ? mobileScrollRef : null}
           className={styles.horizontalTrack}
-          style={{ x }}
+          style={isMobile ? {} : { x }}
+          onScroll={isMobile ? handleMobileScroll : undefined}
         >
 
           {/* Continuous Axis Line - Explicitly sized to full track width */}

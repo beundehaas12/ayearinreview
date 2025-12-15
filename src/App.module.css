@@ -114,14 +114,40 @@
 }
 
 @media (max-width: 768px) {
+
+    /* Mobile: True horizontal scroll container */
+    .viewport {
+        position: fixed;
+        overflow: visible;
+        /* Allow scroll container to work */
+    }
+
+    .horizontalTrack {
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        /* Firefox */
+        transform: none !important;
+        /* Override framer-motion */
+    }
+
+    .horizontalTrack::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
+    }
+
     .timelineItem {
         min-width: 85vw;
         margin-right: 5vw;
+        scroll-snap-align: center;
+        flex-shrink: 0;
     }
-
 
     .spacer {
         min-width: 10vw;
+        flex-shrink: 0;
     }
 }
 
