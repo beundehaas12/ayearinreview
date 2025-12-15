@@ -1,5 +1,19 @@
 export const models2025 = [
     {
+        id: "minimax-text-01",
+        name: "MiniMax-Text-01",
+        maker: "MiniMax",
+        releaseDate: "2025-01-15",
+        type: "Language Model",
+        params: "456B",
+        license: "Proprietary",
+        description: "High-capacity text model for conversational AI; focused on speed and coherence.",
+        pros: ["Extreme speed", "Conversational coherence", "High capacity"],
+        cons: ["Proprietary", "Limited API access"],
+        url: "https://www.minimaxi.com/en",
+        color: "#ff0055"
+    },
+    {
         id: "deepseek-r1",
         name: "DeepSeek-R1",
         maker: "DeepSeek",
@@ -17,7 +31,7 @@ export const models2025 = [
         id: "qwen2-5",
         name: "Qwen2.5",
         maker: "Alibaba Group",
-        releaseDate: "2025-01-29", // Verified verified
+        releaseDate: "2025-01-29",
         type: "Model Family",
         params: "0.5B–72B",
         license: "Qwen License",
@@ -26,20 +40,6 @@ export const models2025 = [
         cons: ["Restrictive license", "Complex deployment"],
         url: "https://qwenlm.github.io/",
         color: "#ff6a00"
-    },
-    {
-        id: "minimax-text-01",
-        name: "MiniMax-Text-01",
-        maker: "MiniMax",
-        releaseDate: "2025-01-15",
-        type: "Language Model",
-        params: "456B",
-        license: "Proprietary",
-        description: "High-capacity text model for conversational AI; focused on speed and coherence.",
-        pros: ["Extreme speed", "Conversational coherence", "High capacity"],
-        cons: ["Proprietary", "Limited API access"],
-        url: "https://www.minimaxi.com/en",
-        color: "#ff0055"
     },
     {
         id: "openai-o3-mini",
@@ -54,20 +54,6 @@ export const models2025 = [
         cons: ["Smaller Context", "Proprietary"],
         url: "https://openai.com",
         color: "#10a37f"
-    },
-    {
-        id: "grok-3",
-        name: "Grok-3",
-        maker: "xAI",
-        releaseDate: "2025-02-17",
-        type: "Multimodal",
-        params: "~5.8T",
-        license: "Proprietary",
-        description: "STEM-optimized multimodal model; 10x compute over prior SOTA; integrated with X platform.",
-        pros: ["10x Compute Scale", "STEM Optimization", "X Integration"],
-        cons: ["Massive hardware req", "Proprietary"],
-        url: "https://x.ai",
-        color: "#ffffff"
     },
     {
         id: "chatgpt-deep-research",
@@ -110,6 +96,20 @@ export const models2025 = [
         cons: ["Proprietary wrapper", "Rate limits"],
         url: "https://mistral.ai",
         color: "#fdbf5d"
+    },
+    {
+        id: "grok-3",
+        name: "Grok-3",
+        maker: "xAI",
+        releaseDate: "2025-02-17",
+        type: "Multimodal",
+        params: "~5.8T",
+        license: "Proprietary",
+        description: "STEM-optimized multimodal model; 10x compute over prior SOTA; integrated with X platform.",
+        pros: ["10x Compute Scale", "STEM Optimization", "X Integration"],
+        cons: ["Massive hardware req", "Proprietary"],
+        url: "https://x.ai",
+        color: "#ffffff"
     },
     {
         id: "claude-3-7-sonnet",
@@ -210,6 +210,20 @@ export const models2025 = [
         color: "#fc3f1d"
     },
     {
+        id: "midjourney-v7",
+        name: "Midjourney v7",
+        maker: "Midjourney",
+        releaseDate: "2025-04-03",
+        type: "Image Model",
+        params: "Unknown",
+        license: "Proprietary",
+        description: "Image generation with enhanced stylization and coherence.",
+        pros: ["Artistic Style", "High Coherence", "Community Favorite"],
+        cons: ["Discord Interface", "Paid only"],
+        url: "https://midjourney.com",
+        color: "#facf00"
+    },
+    {
         id: "llama-4",
         name: "Llama 4",
         maker: "Meta AI",
@@ -222,22 +236,6 @@ export const models2025 = [
         cons: ["Heavy Hardware Req", "Custom License"],
         url: "https://llama.meta.com/",
         color: "#0668E1"
-    },
-
-
-    {
-        id: "qwen-3",
-        name: "Qwen3",
-        maker: "Alibaba Cloud",
-        releaseDate: "2025-04-29",
-        type: "Model Family",
-        params: "0.6B–235B",
-        license: "Apache 2.0",
-        description: "Multilingual family; trained on 36T tokens for broad tasks.",
-        pros: ["36T Token Corpus", "Apache 2.0", "Broad Capability"],
-        cons: ["Hardware demands (235B)", "Documentation"],
-        url: "https://qwenlm.github.io/",
-        color: "#ff6a00"
     },
     {
         id: "gpt-4-1",
@@ -252,6 +250,20 @@ export const models2025 = [
         cons: ["Not SOTA Reasoning", "Legacy Architecture"],
         url: "https://openai.com",
         color: "#10a37f"
+    },
+    {
+        id: "qwen-3",
+        name: "Qwen3",
+        maker: "Alibaba Cloud",
+        releaseDate: "2025-04-29",
+        type: "Model Family",
+        params: "0.6B–235B",
+        license: "Apache 2.0",
+        description: "Multilingual family; trained on 36T tokens for broad tasks.",
+        pros: ["36T Token Corpus", "Apache 2.0", "Broad Capability"],
+        cons: ["Hardware demands (235B)", "Documentation"],
+        url: "https://qwenlm.github.io/",
+        color: "#ff6a00"
     },
     {
         id: "alphaevolve",
@@ -338,20 +350,6 @@ export const models2025 = [
         color: "#333333"
     },
     {
-        id: "midjourney-v7",
-        name: "Midjourney v7",
-        maker: "Midjourney",
-        releaseDate: "2025-04-03",
-        type: "Image Model",
-        params: "Unknown",
-        license: "Proprietary",
-        description: "Image generation with enhanced stylization and coherence.",
-        pros: ["Artistic Style", "High Coherence", "Community Favorite"],
-        cons: ["Discord Interface", "Paid only"],
-        url: "https://midjourney.com",
-        color: "#facf00"
-    },
-    {
         id: "gemma-3",
         name: "Gemma 3",
         maker: "Google",
@@ -425,7 +423,7 @@ export const models2025 = [
         id: "gpt-oss",
         name: "GPT-OSS",
         maker: "OpenAI",
-        releaseDate: "2025-08-05", // Same day
+        releaseDate: "2025-08-05",
         type: "Open Coding Model",
         params: "20B–120B",
         license: "Apache 2.0",
@@ -439,7 +437,7 @@ export const models2025 = [
         id: "claude-4-1-opus",
         name: "Claude 4.1 Opus",
         maker: "Anthropic",
-        releaseDate: "2025-08-05", // Same day
+        releaseDate: "2025-08-05",
         type: "Reasoning Model",
         params: "Unknown",
         license: "Proprietary",
@@ -548,6 +546,20 @@ export const models2025 = [
         color: "#3366ff"
     },
     {
+        id: "grok-imagine",
+        name: "Grok Imagine",
+        maker: "xAI",
+        releaseDate: "2025-10-05",
+        type: "Video Model",
+        params: "Unknown",
+        license: "Proprietary",
+        description: "AI video generation system; text-to-video with real-time editing and audio.",
+        pros: ["Fast Generation", "Audio Integration", "X Platform Native"],
+        cons: ["Platform Locked", "Content Moderation"],
+        url: "https://x.ai",
+        color: "#ffffff"
+    },
+    {
         id: "minimax-m2",
         name: "MiniMax-M2",
         maker: "MiniMax",
@@ -561,8 +573,6 @@ export const models2025 = [
         url: "https://www.minimaxi.com/en",
         color: "#ff0055"
     },
-
-
     {
         id: "alice-ai-llm",
         name: "Alice AI LLM 1.0",
@@ -578,20 +588,6 @@ export const models2025 = [
         color: "#fc3f1d"
     },
     {
-        id: "gpt-5-1",
-        name: "GPT-5.1",
-        maker: "OpenAI",
-        releaseDate: "2025-11-12",
-        type: "Refined Model",
-        params: "Unknown",
-        license: "Proprietary",
-        description: "Mid-generation upgrade; reduced latency and pricing.",
-        pros: ["Lower Latency", "Cost Effective", "Reliable 5.0 base"],
-        cons: ["Incremental", "Closed"],
-        url: "https://openai.com",
-        color: "#10a37f"
-    },
-    {
         id: "ernie-5-0",
         name: "ERNIE 5.0",
         maker: "Baidu",
@@ -604,6 +600,20 @@ export const models2025 = [
         cons: ["Regional", "Censorship"],
         url: "https://research.baidu.com/",
         color: "#003366"
+    },
+    {
+        id: "gpt-5-1",
+        name: "GPT-5.1",
+        maker: "OpenAI",
+        releaseDate: "2025-11-12",
+        type: "Refined Model",
+        params: "Unknown",
+        license: "Proprietary",
+        description: "Mid-generation upgrade; reduced latency and pricing.",
+        pros: ["Lower Latency", "Cost Effective", "Reliable 5.0 base"],
+        cons: ["Incremental", "Closed"],
+        url: "https://openai.com",
+        color: "#10a37f"
     },
     {
         id: "grok-4-1",
@@ -647,7 +657,6 @@ export const models2025 = [
         url: "https://anthropic.com",
         color: "#d97757"
     },
-
     {
         id: "gpt-5-2",
         name: "GPT-5.2",
@@ -661,20 +670,6 @@ export const models2025 = [
         cons: ["Very Expensive", "Closed"],
         url: "https://openai.com",
         color: "#10a37f"
-    },
-    {
-        id: "grok-imagine",
-        name: "Grok Imagine",
-        maker: "xAI",
-        releaseDate: "2025-10-05",
-        type: "Video Model",
-        params: "Unknown",
-        license: "Proprietary",
-        description: "AI video generation system; text-to-video with real-time editing and audio.",
-        pros: ["Fast Generation", "Audio Integration", "X Platform Native"],
-        cons: ["Platform Locked", "Content Moderation"],
-        url: "https://x.ai",
-        color: "#ffffff"
     },
 
 ];
