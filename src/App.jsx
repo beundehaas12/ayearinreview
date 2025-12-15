@@ -105,7 +105,6 @@ function App() {
   const activeColor = activeModel ? activeModel.color : '#00f3ff';
 
   const handleMonthClick = (monthName) => {
-    // robust mapping
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
@@ -114,36 +113,50 @@ function App() {
 
     if (targetMonthIndex === -1) return;
 
-    // Find the first model that is in this month OR after it
-    // This handles gaps (like September) by jumping to October
     const modelIndex = currentModels.findIndex(m => {
       const d = parseDate(m.releaseDate);
       return d.getMonth() >= targetMonthIndex;
     });
 
-    if (modelIndex !== -1 && scrollRange > 0) {
-      // Calculate progress based on index
-      const progress = modelIndex / (currentModels.length - 1);
-      const targetY = progress * scrollRange;
+    if (modelIndex !== -1) {
+      const targetScrollPos = modelIndex * (cardWidth + gap);
 
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth'
-      });
+      if (isMobile && mobileScrollRef.current) {
+        // Mobile: Scroll the horizontal container
+        mobileScrollRef.current.scrollTo({
+          left: targetScrollPos,
+          behavior: 'smooth'
+        });
+      } else if (scrollRange > 0) {
+        // Desktop: Scroll the window vertically
+        const progress = modelIndex / (currentModels.length - 1);
+        const targetY = progress * scrollRange;
+        window.scrollTo({
+          top: targetY,
+          behavior: 'smooth'
+        });
+      }
     }
   };
 
   const handleJumpToModel = (modelId) => {
     const index = currentModels.findIndex(m => m.id === modelId);
-    if (index !== -1 && scrollRange > 0) {
-      // Calculate progress based on index
-      const progress = index / (currentModels.length - 1);
-      const targetY = progress * scrollRange;
+    if (index !== -1) {
+      const targetScrollPos = index * (cardWidth + gap);
 
-      window.scrollTo({
-        top: targetY,
-        behavior: 'smooth'
-      });
+      if (isMobile && mobileScrollRef.current) {
+        mobileScrollRef.current.scrollTo({
+          left: targetScrollPos,
+          behavior: 'smooth'
+        });
+      } else if (scrollRange > 0) {
+        const progress = index / (currentModels.length - 1);
+        const targetY = progress * scrollRange;
+        window.scrollTo({
+          top: targetY,
+          behavior: 'smooth'
+        });
+      }
     }
   };
 
